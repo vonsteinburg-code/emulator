@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Emulator — Handcrafted ZX Spectrum Emulator</title>
+    <meta name="description" content="Emulator — Handcrafted ZX Spectrum emulator"/>
+    <link rel="icon" href="logo.svg" sizes="any" type="image/svg+xml">
+
+    <style>
+        :root {
+            --page-bg: #efefef;
+            --panel-bg: #fafafa;
+            --text: #072029;
+            --muted: #405b66;
+            --accent-blue: #2f63ff;
+            --max-width: 960px;
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+            --radius: 6px;
+            --panel-border: rgba(2,6,23,0.20);
+            --panel-shadow: 0 1px 2px rgba(2,6,23,0.04);
+            --flow-gap: 24px;
+            --default-size: 0.93rem;
+            --brand-title-size: 1.4rem;
+            --title-size: 1.3rem;
+            --note-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height:100%
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: var(--max-width);
+        }
+
+        /* header: logo at left, navigation at right, navigation aligned with the logo. */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 6px;
+            padding-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: var(--brand-title-size);
+            color: var(--text);
+        }
+
+        .brand .sub {
+            font-size: var(--default-size);
+            color: var(--muted);
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            display: inline-block;
+            object-fit: contain;
+            border-radius: 6px;
+            background: transparent;
+            vertical-align: middle;
+        }
+
+        /* stack navigation above the color band, align items to flex-end so navigation and color band form a unit */
+        .nav-unit {
+            display: flex;
+            flex-direction: column;
+            /* align-items: flex-end; */
+            gap: 8px;
+        }
+
+        /* navigation row, visible links */
+        nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 2
+        }
+
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: var(--default-size);
+            padding: 4px 8px 5px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            background: rgba(2,6,23,0.035);
+        }
+
+        .nav-link:hover, .nav-link:focus {
+            color: var(--muted);
+            outline: none;
+            background: rgba(2,6,23,0.10);
+        }
+
+        /*
+         * color band placed directly under the nav row.
+         * the hidden .sizer in .band duplicates the navigation content to force the band width to match the navigation's width exactly.
+         * the SVG draws four vertical color bands (red, yellow, green, blue).
+         */
+        .band {
+            position: relative;
+            display: inline-block;
+            height: 12px;
+            border-radius: 0px;
+            overflow: hidden;
+            vertical-align: top;
+        }
+
+        .band .sizer {
+            visibility: hidden;
+            opacity: 0;
+            display: inline-block;
+            font-weight: 500;
+            font-size: var(--default-size);
+            padding: 6px 8px;
+            white-space: nowrap;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        .band svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height:100%;
+            display:block;
+        }
+
+        main {
+            display:block;
+            margin-top:6px;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            font-size: var(--title-size);
+        }
+
+        p {
+            margin: 0 0 14px 0;
+            color: var(--muted);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 34px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: var(--default-size);
+            display:inline-block;
+            color: var(--panel-bg);
+            background: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(0,0,0,0.20);
+        }
+
+        section {
+            padding: 26px;
+            /* padding: 26px 32px 26px 32px; */
+            margin: 36px 0;
+            background: var(--panel-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--panel-shadow);
+            font-size: var(--default-size);
+        }
+
+        .section-title {
+            font-size: var(--title-size);
+            font-weight: 800;
+            margin-bottom: 12px;
+            color:var(--text);
+        }
+
+        /* grid for screenshots, items stretch to the same row height */
+        .screens {
+            display: grid;
+            /* three columns */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            /* ensure grid items stretch to the row height */
+            align-items: stretch;
+        }
+
+        /* each screenshot container is a vertical flex column that fills the grid cell */
+        .shot {
+            display: flex;
+            flex-direction: column;
+            /* important: fills the grid row height */
+            height: 100%;
+            /* background: transparent; */
+            background: #ffffff;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.10);
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* responsive image: scales to the column width, keeps aspect ratio */
+        .shot img {
+            display: block;
+            width: 100%;
+            /* preserve aspect ratio */
+            height: auto;
+            max-width: 100%;
+            object-fit: contain;
+            padding: 6px;
+        }
+
+        /* description stays under the image and is pushed to the bottom when images vary in height */
+        .shot figcaption, .shot .caption {
+            margin: 0;
+            padding: 8px 10px;
+            font-size: var(--note-size);
+            color: var(--muted);
+            line-height: 1.3;
+            background: transparent;
+            /* push the caption to the bottom of the .shot */
+            margin-top: auto;
+            text-align: left;
+        }
+
+        .features-list {
+            display: grid;
+            gap: 10px;
+            padding-left: 6px;
+            margin-top: 6px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .feature-text h4 {
+            margin: 0;
+            font-size: var(--default-size);
+            color: var(--text);
+        }
+
+        .feature-text p {
+            margin: 6px 0 0 0;
+            color: var(--muted);
+            font-size: var(--default-size);
+        }
+
+        .feature-bar {
+            width: 4px;
+            height: 0.9rem;
+            border-radius: 0px;
+            flex: 0 0 auto;
+            margin-top: 4px;
+            background: #dfe6eb;
+        }
+
+        /* color classes used for the color band */
+        .feature-bar.red        { background: #ff3b3b; }
+        .feature-bar.yellow     { background: #ffc300; }
+        .feature-bar.green      { background: #28E07A; }
+        .feature-bar.blue       { background: #00a4e1; }
+
+        .downloads {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /*
+        .contact {
+            margin-top: 8px;
+            color: var(--muted);
+        }
+        */
+
+        .license {
+            margin-top: 8px;
+            color: var(--muted);
+        }
+
+        footer {
+            margin-top: 16px;
+            padding-bottom: 36px;
+            color: var(--muted);
+            font-size: var(--default-size);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            gap: 10px;
+        }
+
+        .mono {
+            font-family: var(--mono);
+            color: var(--muted);
+        }
+
+        a { word-break: break-all; }
+
+        a:focus, button:focus {
+            outline: 2px solid rgba(47,99,255,0.20);
+            outline-offset: 2px;
+            /* border-radius: var(--radius); */
+        }
+
+        code {
+            background: #f7f9fb;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-family: var(--mono);
+            color: var(--text);
+        }
+
+        .code-like {
+            background: #efefef;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow: auto;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: var(--default-size);
+        }
+
+        .warning-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background-color: #fffbeb;
+            border-left: 10px solid #d97706;
+            border-radius: var(--radius);
+            padding: 16px;
+            margin: 24px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.20);
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .warning-text {
+            color: #78350f;
+            font-size: var(--default-size);
+        }
+
+        dialog {
+            border: none;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        dialog img {
+            max-width: 87vw;
+            max-height: 87vh;
+            display: block;
+            border-radius: 0px;
+        }
+
+        @media (max-width: 940px) {
+            .nav-unit {
+                display: none;
+            }
+
+            .band .sizer {
+                display: none;
+            }
+
+            section {
+                margin-top: 36px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .logo {
+                display: none;
+            }
+
+            /* mobile: single-column grid for screenshots, captions remain under images and centered by other rules as needed */
+            .screens {
+                grid-template-columns: 1fr;
+            }
+
+            .brand {
+                word-break: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" role="document" aria-labelledby="site-title">
+    <header>
+        <a class="brand" href="" id="site-title" aria-label="Emulator">
+            <img class="logo" src="logo.svg" alt="Emulator" width="56" height="56"/>
+            <div>
+                <h1>Emulator</h1>
+                <div class="sub">
+                    The 8-bit nostalgia and the "R Tape loading error" adventures
+                </div>
+            </div>
+        </a>
+        <div class="nav-unit" aria-hidden="false">
+            <nav aria-label="primary">
+                <a class="nav-link" href="#features">Features</a>
+                <a class="nav-link" href="#screenshots">Screenshots</a>
+                <a class="nav-link" href="#download">Download</a>
+                <a class="nav-link" href="#license">License</a>
+            </nav>
+
+            <!-- color band sits directly under the navigation, matching its width because of the hidden sizer -->
+            <div class="band" aria-hidden="true" title="ZX Spectrum color band">
+                <!-- hidden sizer duplicates the exact navigation content so the band width equals the navigation width -->
+                <span class="sizer" aria-hidden="true">
+                    <span class="nav-link">Features</span>
+                    <span class="nav-link">Screenshots</span>
+                    <span class="nav-link">Download</span>
+                    <span class="nav-link">License</span>
+                </span>
+                <!-- SVG: vertical color bands -->
+                <svg viewBox="0 0 100 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <rect x= "0" y="0" width="25" height="12" fill="#ff1c1c"/>
+                    <rect x="25" y="0" width="25" height="12" fill="#ffc300"/>
+                    <rect x="50" y="0" width="25" height="12" fill="#3a9b00"/>
+                    <rect x="75" y="0" width="25" height="12" fill="#00a4e1"/>
+                </svg>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="first" aria-labelledby="first-title">
+            <div class="section-title" id="first-title">Handcrafted ZX Spectrum emulator</div>
+            <p>
+            <b>Emulator</b> is an easy-to-use, handcrafted, still unpolished <b>ZX Spectrum</b> emulator built completely from scratch using Java.
+            <br>
+            It does not have any fancy features, it does not include a GUI debugger, an integrated assembler or disassembler,
+            and it is in no way meant to be a complete ZX Spectrum development environment.
+            </p>
+            <p>
+            Development is somewhat active and ongoing, meaning new features, tweaks and performance improvements are added every now and then.
+            Feedback and suggestions are more than welcome, however, please keep in mind that this is a hobby project and not a commercial product.
+            </p>
+            <p>
+            While this project strives to accurately emulate the original hardware, any claims of accuracy are intended as best-effort targets rather than absolute guarantees.
+            </p>
+            <div class="controls">
+                <a class="btn" href="#download">Download</a>
+                <a class="btn ghost" href="#features">Learn more</a>
+            </div>
+        </section>
+
+        <section id="features" aria-labelledby="features-title">
+            <div class="section-title" id="features-title">Features</div>
+            <p>
+            Note that some of these features might be near completion but not yet fully implemented, and are only partially supported.
+            </p>
+            <div class="features-list" role="list">
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar red" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>Z80</h4>
+                        <ul style="margin:0px 0 0 0px;color:var(--muted)">
+                        <li>support for the Z80 CPU CMOS and NMOS variants</li>
+                        <li>IFF2 bug support for the Z80 CPU NMOS variant</li>
+                        <li>handles the entire Z80 instruction set, both documented and undocumented</li>
+                        <li>passes the Zexall and Zexdoc test suites, as well as other traditional Z80 CPU tests</li>
+                        <li>accurate timings</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar yellow" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>ZX Spectrum</h4>
+                        <ul style="margin:0px 0 0 0px;color:var(--muted)">
+                        <li>support for the ZX Spectrum 16K, ZX Spectrum 48K, ZX Spectrum+, ZX Spectrum 128K and ZX Spectrum +2 machines</li>
+                        <li>beeper and AY sound</li>
+                        <li>memory and I/O contention</li>
+                        <li>floating bus</li>
+                        <li>early and late timing support</li>
+                        <li>cycle accurate screen rendering, multicolor effects</li>
+                        <li>border effects</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar green" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>Emulator</h4>
+                        <ul style="margin:0px 0 0 0px;color:var(--muted)">
+                        <li>loading and saving snapshots: SNA</li>
+                        <li>loading from tape images: TAP, TZX</li>
+                        <li>flash loading</li>
+                        <li>tape browser</li>
+                        <li>saving to tape: TAP, WAV</li>
+                        <li>support for loading custom ROM images</li>
+                        <li>loading of supported files from inside ZIP archives</li>
+                        <li>support for multiple border dimensions</li>
+                        <li>full screen exclusive mode with display mode selection</li>
+                        <li>light and dark themes</li>
+                        <li>display scaling: 100%, 200%, 300%, 400%</li>
+                        <li>cross-platform</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar blue" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>Miscellaneous</h4>
+                        <p>
+                        Available as a standard Java archive, and also as a <b>native executable</b> for both Windows and Linux.
+                        <br>
+                        The native images are built from the original JAR using <b>GraalVM</b>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="not-supported" aria-labelledby="not-supported-title">
+            <div class="section-title" id="not-supported-title">Unsupported features</div>
+            <p>The following non-exhaustive list of features are currently not supported:</p>
+            <p>
+            DRAM fading, snow effect, PAL TV | CRT effects, loading from and saving to various snapshot formats, handling POK files, Microdrive support,
+            four brightness levels, ULA+, TZX CSW blocks, TZX GDB blocks, mixing flash loading with standard speed loading, PZX, Lenslok, printing, loading from WAV files, loading from CSW files, RZX, and probably many others ...
+            </p>
+        </section>
+
+        <section id="screenshots" aria-labelledby="screenshots-title">
+            <div class="section-title" id="screenshots-title">Screenshots</div>
+            <div class="screens" aria-hidden="false">
+                <figure class="shot">
+                    <a href="ubuntu-24.04_dark.png" class="zoom-link"">
+                        <img src="ubuntu-24.04_dark.png" alt="Ubuntu 24.04, custom theme, dark mode">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, dark mode</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_light.png" class="zoom-link">
+                        <img src="ubuntu-24.04_light.png" alt="Ubuntu 24.04, custom theme, light mode">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, light mode</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_dark_hyperactive.png" class="zoom-link">
+                        <img src="ubuntu-24.04_dark_hyperactive.png" alt="Ubuntu 24.04, custom theme, dark mode, embedded menu bar, running Hyperactive">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, dark mode, embedded menu bar, running Hyperactive</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_kde_default_bbg48.png" class="zoom-link">
+                        <img src="ubuntu-24.04_kde_default_bbg48.png" alt="Ubuntu 24.04, KDE default theme, running BBG48">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, KDE default theme, running BBG48</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_kde_default_z80-tests.png" class="zoom-link">
+                        <img src="ubuntu-24.04_kde_default_z80-tests.png" alt="Ubuntu 24.04, KDE default theme, running Raxoft's Z80 tests">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, KDE default theme, running Raxoft's Z80 tests</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_kde_default_terramex.png" class="zoom-link">
+                        <img src="ubuntu-24.04_kde_default_terramex.png" alt="Ubuntu 24.04, KDE default theme, hidden menubar, running Terramex">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, KDE default theme, hidden menubar, running Terramex</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="win11_default_shock-megademo.png" class="zoom-link">
+                        <img src="win11_default_shock-megademo.png" alt="Windows 11, default theme, running Shock Megademo">
+                    </a>
+                    <figcaption class="caption">Windows 11, default theme, running Shock Megademo</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="win11_default_floating-bus.png" class="zoom-link">
+                        <img src="win11_default_floating-bus.png" alt="Windows 11, default theme, running floating bus tests">
+                    </a>
+                    <figcaption class="caption">Windows 11, default theme, running floating bus tests</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="win10_default_basic.png" class="zoom-link">
+                        <img src="win10_default_basic.png" alt="Windows 10, default theme, BASIC">
+                    </a>
+                    <figcaption class="caption">Windows 10, default theme, BASIC</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="winxp_default_timing-test.png" class="zoom-link">
+                        <img src="winxp_default_timing-test.png" alt="Windows XP, default theme, running the ZX Spectrum 48K Timing Tests">
+                    </a>
+                    <figcaption class="caption">Windows XP, default theme, running the ZX Spectrum 48K Timing Tests</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="winxp_default_fpga.png" class="zoom-link">
+                        <img src="winxp_default_fpga.png" alt="Windows XP, default theme, running the FPGA test">
+                    </a>
+                    <figcaption class="caption">Windows XP, default theme, running the FPGA test</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="winxp_default_dark-mode.png" class="zoom-link">
+                        <img src="winxp_default_dark-mode.png" alt="Windows XP, default theme, dark-mode">
+                    </a>
+                    <figcaption class="caption">Windows XP, default theme, dark-mode</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section id="download" aria-labelledby="download-title">
+            <div class="section-title" id="download-title">Download</div>
+            <p class="muted">No packages are currently available.</p>
+
+            <div class="warning-box">
+                <span class="warning-icon">⚠️</span>
+                <span class="warning-text">
+                Depending on how you operate it, this emulator, just like a real ZX Spectrum machine,
+                can generate flashing images. Please <strong>DO NOT USE</strong> this software if you have any kind of sensitivity to flashing images.
+                </span>
+            </div>
+        </section>
+
+        <!--
+        <section id="contact" aria-labelledby="contact-title">
+            <div class="section-title" id="contact-title">Contact</div>
+            <div class="contact">
+                <div class="mono">contact@localhost.localdomain</div>
+            </div>
+        </section>
+        -->
+
+        <section id="license" aria-labelledby="license-title">
+            <div class="section-title" id="license-title">License</div>
+            <div class="license">
+                <div style="margin-top: 8px; color: var(--muted)">
+                This software is licensed under the terms of the MIT License.
+                <br>
+                Read more about the MIT License at <a href="https://choosealicense.com/licenses/mit">https://choosealicense.com/licenses/mit</a>.
+                </div>
+                <div style="margin-top: 8px; color: var(--muted)">
+                Additionally, this software includes the <b>FlatLaf</b> look and feel package, which is licensed under the terms of the Apache License, version 2.0.
+                Read more about the Apache License, version 2.0 at <a href="https://choosealicense.com/licenses/apache-2.0">https://choosealicense.com/licenses/apache-2.0</a>.
+                Read more about the FlatLaf package at <a href="https://www.formdev.com/flatlaf">https://www.formdev.com/flatlaf</a>.
+                </div>
+                <div style="margin-top: 8px; color: var(--muted)">
+                <b>NOTICE for the firmware images distributed with this software</b>:
+                Amstrad have kindly given their permission for the redistribution of their copyrighted material but retain that copyright.
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div>© <strong>Emulator</strong> — Handcrafted ZX Spectrum emulator</div>
+        </footer>
+    </main>
+</div>
+
+<dialog id="popup" closedby="any" onclick="this.close()">
+    <img id="popup-image" src="" alt="Full size">
+</dialog>
+<script>
+    document.querySelectorAll('.zoom-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('popup-image').src = link.href;
+            document.getElementById('popup').showModal();
+        });
+    });
+</script>
+</body>
+</html>
