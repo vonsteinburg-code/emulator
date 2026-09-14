@@ -22,6 +22,7 @@
     --max-brand-height: 48px;
 
     line-height: 1.4;
+    overflow-y: scroll; /* always show the scrollbar */
 }
 
 * {
@@ -294,6 +295,11 @@ section {
     background: #dfe6eb;
 }
 
+.feature-ul {
+    margin:0px 0 0 0px;
+    color:var(--muted);
+}
+
 /* color classes used for the color band */
 .feature-bar.red        { background: #ff3b3b; }
 .feature-bar.yellow     { background: #ffc300; }
@@ -348,17 +354,22 @@ a:focus:not(:focus-visible) {
   outline: none;
 }
 
+.hidden {
+    display: none;
+}
+
 .back {
     text-decoration: none;
     color: var(--text);
 }
 
 code {
-    background: #f7f9fb;
-    padding: 0 6px;
-    border-radius: 4px;
+    background: #efefef;
+    padding: 4px 4px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.05);
     font-family: var(--mono);
-    color: var(--text);
+    color: var(--muted);
 }
 
 .code-like {
@@ -367,7 +378,7 @@ code {
     border-radius: 6px;
     border: 1px solid rgba(0,0,0,0.05);
     overflow: auto;
-    color: var(--text);
+    color: var(--muted);
     font-family: var(--mono);
     font-size: var(--default-size);
 }
@@ -382,7 +393,7 @@ code {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
     border-radius: var(--radius);
 
-    margin: 20px 0;
+    margin: 24px 0;
     padding: 16px;
 }
 
@@ -394,7 +405,7 @@ code {
     border-left: 7px solid #d97706;
     border-radius: var(--radius);
     padding: 16px;
-    margin: 24px 0;
+    margin: 24px 0 16px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
 }
 

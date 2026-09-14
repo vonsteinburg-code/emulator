@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Emulator — Handcrafted ZX Spectrum Emulator</title>
+    <meta name="description" content="Emulator — Handcrafted ZX Spectrum emulator"/>
+    <link rel="icon" href="logo.svg" sizes="any" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="preload" href="close.svg" as="image" />
+</head>
+<body>
+<div class="wrap" aria-labelledby="site-title">
+    <header>
+        <div class="header-content">
+            <span>
+                <a href="">
+                <img class="logo" src="header-logo.svg" alt="Emulator"/>
+                </a>
+            </span>
+            <span id="menu" class="toggle">
+                <a href="">
+                <img class="menu-image" src="menu.svg" alt="Menu"/>
+                </a>
+            </span>
+            <div id="menu-content" class="toggle">
+                <!-- make the browser happy so it won't complain about the preloaded image -->
+                <div class="hidden"><img src="close.svg" alt=""/></div>
+                <div><a class="menu-content-link" href="index.html#first-section">About</a></div>
+                <div><a class="menu-content-link" href="index.html#features">Features</a></div>
+                <div><a class="menu-content-link" href="index.html#unsupported">Unsupported features</a></div>
+                <div><a class="menu-content-link" href="index.html#screenshots">Screenshots</a></div>
+                <div><a class="menu-content-link" href="index.html#system-requirements">System requirements</a></div>
+                <div><a class="menu-content-link" href="index.html#download">Download</a></div>
+                <div><a class="menu-content-link" href="#">User's manual</a></div>
+                <div><a class="menu-content-link no-bottom" href="index.html#license">License</a></div>
+                <!-- <div><a class="menu-content-link no-bottom" href="#license">Licensing terms</a></div> -->
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="first-section" aria-labelledby="first-title">
+            <div class="section-title" id="first-title"><a href="#" class="back">User's manual</a></div>
+            <p>
+            This section is still under construction.
+            </p>
+            <div class="controls">
+                <a class="button ghost" href="index.html">Go back</a>
+            </div>
+        </section>
+        <footer>
+            <div>© <strong>Emulator</strong> — Handcrafted ZX Spectrum emulator</div>
+        </footer>
+    </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>
+

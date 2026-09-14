@@ -24,15 +24,17 @@
                 </a>
             </span>
             <div id="menu-content" class="toggle">
+                <!-- make the browser happy so it won't complain about the preloaded image -->
+                <div class="hidden"><img src="close.svg" alt=""/></div>
                 <div><a class="menu-content-link" href="#first-section">About</a></div>
                 <div><a class="menu-content-link" href="#features">Features</a></div>
                 <div><a class="menu-content-link" href="#unsupported">Unsupported features</a></div>
                 <div><a class="menu-content-link" href="#screenshots">Screenshots</a></div>
-                <!-- <div><a class="menu-content-link" href="javascript:;">Supported platforms</a></div> -->
+                <div><a class="menu-content-link" href="#system-requirements">System requirements</a></div>
                 <div><a class="menu-content-link" href="#download">Download</a></div>
-                <!-- <div><a class="menu-content-link" href="javascript:;">User's manual</a></div> -->
-                <!-- <div><a class="menu-content-link no-bottom" href="#license">License</a></div> -->
-                <div><a class="menu-content-link no-bottom" href="#license">Licensing terms</a></div>
+                <div><a class="menu-content-link" href="user-manual.html">User's manual</a></div>
+                <div><a class="menu-content-link no-bottom" href="#license">License</a></div>
+                <!-- <div><a class="menu-content-link no-bottom" href="#license">Licensing terms</a></div> -->
             </div>
         </div>
     </header>
@@ -99,7 +101,7 @@
                     <div class="feature-bar yellow" aria-hidden="true"></div>
                     <div class="feature-text">
                         <h4>ZX Spectrum</h4>
-                        <ul style="margin:0px 0 0 0px;color:var(--muted)">
+                        <ul class="feature-ul">
                         <li>support for the ZX Spectrum 16K, ZX Spectrum 48K, ZX Spectrum+, ZX Spectrum 128K and ZX Spectrum +2 machines</li>
                         <li>beeper and AY sound</li>
                         <li>memory and I/O contention</li>
@@ -117,7 +119,7 @@
                     <div class="feature-bar green" aria-hidden="true"></div>
                     <div class="feature-text">
                         <h4>Emulator</h4>
-                        <ul style="margin:0px 0 0 0px;color:var(--muted)">
+                        <ul class="feature-ul">
                         <li>loading and saving snapshots: SNA</li>
                         <li>loading from tape images: TAP, TZX</li>
                         <li>flash loading</li>
@@ -139,7 +141,7 @@
                     <div class="feature-text">
                         <h4>Miscellaneous</h4>
                         <p>
-                        Available as a standard Java archive, and also as a <b>native executable</b> for both Windows and Linux.
+                        Available as a <b>cross-platform Java archive</b>, and also as a <b>native executable</b> for both Windows and Linux.
                         <br>
                         The native images are built from the original JAR using <b>GraalVM</b>.
                         </p>
@@ -246,10 +248,22 @@
             </div>
         </section>
 
+        <section id="system-requirements" aria-labelledby="system-requirements-title">
+            <div class="section-title" id="system-requirements-title"><a href="#" class="back">System requirements</a></div>
+            <p>
+            The cross-platform <b>JAR</b> distribution requires <b>Java 8 or newer</b> to be installed on your system,
+            and it should work on any operating system supporting the required Java version.
+            This includes <b>Windows, from Windows XP up to Windows 11</b>, as well as <b>Linux distributions like Ubuntu 24.04 and Ubuntu 26.04</b>.
+            </p>
+            <p>
+            Running the emulator:
+            <div class="code-like">java -jar emulator.jar</div>
+            </p>
+        </section>
+
         <section id="download" aria-labelledby="download-title">
             <div class="section-title" id="download-title"><a href="#" class="back">Download</a></div>
-            <p class="muted">No packages are currently available.</p>
-
+            <p>No packages are currently available.</p>
             <div class="warning-box">
                 <!-- <span class="warning-icon">⚠️</span> -->
                 <span class="warning-text">
@@ -271,20 +285,20 @@
         <section id="license" aria-labelledby="license-title">
             <div class="section-title" id="license-title"><a href="#" class="back">License</a></div>
             <div class="license">
-                <div style="margin-top: 8px; color: var(--muted)">
+                <p>
                 This software is licensed under the terms of the MIT License.
                 <br>
                 Read more about the MIT License at <a href="https://choosealicense.com/licenses/mit">https://choosealicense.com/licenses/mit</a>.
-                </div>
-                <div style="margin-top: 8px; color: var(--muted)">
+                </p>
+                <p>
                 Additionally, this software includes the <b>FlatLaf</b> look and feel package, which is licensed under the terms of the Apache License, version 2.0.
                 Read more about the Apache License, version 2.0 at <a href="https://choosealicense.com/licenses/apache-2.0">https://choosealicense.com/licenses/apache-2.0</a>.
                 Read more about the FlatLaf package at <a href="https://www.formdev.com/flatlaf">https://www.formdev.com/flatlaf</a>.
-                </div>
-                <div style="margin-top: 8px; color: var(--muted)">
+                </p>
+                <p>
                 <b>NOTICE for the firmware images distributed with this software</b>:
                 Amstrad have kindly given their permission for the redistribution of their copyrighted material but retain that copyright.
-                </div>
+                </p>
             </div>
         </section>
 
@@ -306,33 +320,7 @@
             document.getElementById('popup').showModal();
         });
     });
-
-    const menu = document.getElementById('menu');
-    const menuContent = document.getElementById('menu-content');
-
-    menu.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleMainMenu(menu, menuContent);
-    });
-
-    document.querySelectorAll('.menu-content-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            toggleMainMenu(menu, menuContent);
-        });
-    });
-
-    function toggleMainMenu(mainMenu, mainMenuContent) {
-        mainMenu.classList.toggle('open');
-        mainMenuContent.classList.toggle('active');
-    }
-
-    window.addEventListener('click', function(event) {
-        if (menuContent.classList.contains('active')
-            && !menu.contains(event.target) && !menuContent.contains(event.target)) {
-                menu.classList.remove('open');
-                menuContent.classList.remove('active');
-        }
-    });
 </script>
+<script src="menu.js"></script>
 </body>
 </html>
