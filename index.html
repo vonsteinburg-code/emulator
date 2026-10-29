@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Emulator - Handcrafted ZX Spectrum Emulator</title>
+    <meta name="description" content="Emulator - Handcrafted ZX Spectrum emulator"/>
+    <link rel="icon" href="logo.svg" sizes="any" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="preload" href="close.svg" as="image" />
+</head>
+<body>
+<div class="wrap" aria-labelledby="site-title">
+    <header>
+        <div class="header-content">
+            <span>
+                <a href="">
+                <img class="logo" src="header-logo.svg" alt="Emulator"/>
+                </a>
+            </span>
+            <span id="menu" class="toggle">
+                <a href="">
+                <img class="menu-image" src="menu.svg" alt="Menu"/>
+                </a>
+            </span>
+            <div id="menu-content" class="toggle">
+                <!-- make the browser happy so it won't complain about the preloaded image -->
+                <div class="hidden"><img src="close.svg" alt=""/></div>
+                <div><a class="menu-content-link" href="#first-section">About</a></div>
+                <div><a class="menu-content-link" href="#features">Features</a></div>
+                <div><a class="menu-content-link" href="#unsupported">Unsupported features</a></div>
+                <div><a class="menu-content-link" href="#screenshots">Screenshots</a></div>
+                <div><a class="menu-content-link" href="#system-requirements">System requirements</a></div>
+                <div><a class="menu-content-link" href="#download">Download</a></div>
+                <div><a class="menu-content-link" href="user-manual.html">User's manual</a></div>
+                <div><a class="menu-content-link no-bottom" href="#license">License</a></div>
+                <!-- <div><a class="menu-content-link no-bottom" href="#license">Licensing terms</a></div> -->
+            </div>
+        </div>
+    </header>
+    <main>
+        <!--
+        <div id="menu-content">
+            <div><a class="menu-content-link" href="#first-section">About</a></div>
+            <div><a class="menu-content-link" href="#features">Features</a></div>
+            <div><a class="menu-content-link" href="#features">Unsupported features</a></div>
+            <div><a class="menu-content-link" href="#screenshots">Screenshots</a></div>
+            <div><a class="menu-content-link" href="#download">Download</a></div>
+            <div><a class="menu-content-link no-bottom" href="#license">Licensing terms</a></div>
+        </div>
+        -->
+
+        <section id="first-section" aria-labelledby="first-title">
+            <div class="section-title" id="first-title"><a href="#" class="back">Handcrafted ZX Spectrum emulator</a></div>
+            <p>
+            <b>Emulator</b> is an easy-to-use, handcrafted, still unpolished <b>ZX Spectrum</b> emulator built completely from scratch using Java.
+            <br>
+            It does not have any fancy features, it does not include a GUI debugger, an integrated assembler or disassembler,
+            and it is in no way meant to be a complete ZX Spectrum development environment.
+            </p>
+            <p>
+            Development is somewhat active and ongoing, meaning new features, tweaks and performance improvements are added every now and then.
+            Feedback and suggestions are more than welcome, however, please keep in mind that this is a hobby project and not a commercial product.
+            </p>
+            <div class="info-box">
+                The 8-bit nostalgia and the "R Tape loading error" adventures
+            </div>
+
+            <p>
+            While this project strives to accurately emulate the original hardware, any claims of accuracy are intended as best-effort targets rather than absolute guarantees.
+            </p>
+
+            <div class="controls">
+                <a class="button" href="#download">Download</a>
+                <a class="button ghost" href="#features">Learn more</a>
+            </div>
+        </section>
+
+        <section id="features" aria-labelledby="features-title">
+            <div class="section-title" id="features-title"><a href="#" class="back">Features</a></div>
+            <p>
+             Here's a short breakdown of the main features you'll find in this emulator.
+             Please note, however, that some of the features might still be in an experimental stage.
+            </p>
+            <div class="features-list" role="list">
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar red" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>Z80</h4>
+                        <ul style="margin:0px 0 0 0px;color:var(--muted)">
+                        <li>support for the Z80 CPU CMOS and NMOS variants</li>
+                        <li>IFF2 bug support for the Z80 CPU NMOS variant</li>
+                        <li>handles the entire Z80 instruction set, both documented and undocumented</li>
+                        <li>passes the Zexall and Zexdoc test suites, as well as other traditional Z80 CPU tests</li>
+                        <li>accurate timings</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar yellow" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>ZX Spectrum</h4>
+                        <ul class="feature-ul">
+                        <li>support for the ZX Spectrum 16K, ZX Spectrum 48K, ZX Spectrum+, ZX Spectrum 128K and ZX Spectrum +2 machines</li>
+                        <li>beeper and AY sound</li>
+                        <li>memory and I/O contention</li>
+                        <li>floating bus</li>
+                        <li>early and late timing support</li>
+                        <li>cycle accurate screen rendering, multicolor effects</li>
+                        <li>border effects</li>
+                        <li>Kempston joystick - keyboard mapped</li>
+                        <li>Kempston mouse</li>
+                        <li>Interface 1 + Microdrive</li>
+                        <li>Print to PDF
+                            <ul>
+                                <li>ZX Printer support for the 16K, 48K machines and the 128K and +2 machines in 48K mode</li>
+                                <li>Built-in RS232 serial port printing support for the 128K and +2 machines</li>
+                            </ul>
+                        </l>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar green" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>Emulator</h4>
+                        <ul class="feature-ul">
+                        <li>loading and saving snapshots: SNA</li>
+                        <li>loading from tape images: TAP, TZX</li>
+                        <li>loading and saving Microdrive cartridge images: MDR</li>
+                        <li>flash loading</li>
+                        <li>tape browser</li>
+                        <li>saving to tape: TAP, WAV</li>
+                        <li>support for loading custom ROM images</li>
+                        <li>loading of supported files from inside ZIP archives</li>
+                        <li>support for multiple border dimensions</li>
+                        <li>full screen exclusive mode with display mode selection</li>
+                        <li>light and dark themes</li>
+                        <li>display scaling: 100%, 200%, 300%, 400%</li>
+                        <li>"PRINT" to file - for capturing program output</li>
+                        <li>cross-platform</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" role="listitem">
+                    <div class="feature-bar blue" aria-hidden="true"></div>
+                    <div class="feature-text">
+                        <h4>Miscellaneous</h4>
+                        <p>
+                        Available as a <b>cross-platform Java archive</b>, and also as a <b>native executable</b> for both Windows and Linux.
+                        <br>
+                        The native images are built from the original JAR using <b>GraalVM</b>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="unsupported" aria-labelledby="unsupported-title">
+            <div class="section-title" id="unsupported-title"><a href="#" class="back">Unsupported features</a></div>
+            <p>The following non-exhaustive list of features is currently not supported:</p>
+            <p>
+            DRAM fading, snow effect, PAL TV | CRT effects, loading from and saving to various snapshot formats, handling POK files,
+            four brightness levels, ULA+, TZX CSW blocks, TZX GDB blocks, mixing flash loading with standard speed loading, PZX, Lenslok, loading from WAV files, loading from CSW files, RZX, and probably many others ...
+            </p>
+        </section>
+
+        <section id="screenshots" aria-labelledby="screenshots-title">
+            <div class="section-title" id="screenshots-title"><a href="#" class="back">Screenshots</a></div>
+            <div class="screenshots" aria-hidden="false">
+                <figure class="shot">
+                    <a href="ubuntu-24.04_dark.png" class="zoom-link">
+                        <img src="ubuntu-24.04_dark.png" alt="Ubuntu 24.04, custom theme, dark mode">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, dark mode</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_light.png" class="zoom-link">
+                        <img src="ubuntu-24.04_light.png" alt="Ubuntu 24.04, custom theme, light mode">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, light mode</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_dark_hyperactive.png" class="zoom-link">
+                        <img src="ubuntu-24.04_dark_hyperactive.png" alt="Ubuntu 24.04, custom theme, dark mode, embedded menu bar, running Hyperactive">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, dark mode, embedded menu bar, running Hyperactive</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_kde_default_bbg48.png" class="zoom-link">
+                        <img src="ubuntu-24.04_kde_default_bbg48.png" alt="Ubuntu 24.04, KDE default theme, running BBG48">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, KDE default theme, running BBG48</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_kde_default_z80-tests.png" class="zoom-link">
+                        <img src="ubuntu-24.04_kde_default_z80-tests.png" alt="Ubuntu 24.04, KDE default theme, running Raxoft's Z80 tests">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, KDE default theme, running Raxoft's Z80 tests</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_kde_default_terramex.png" class="zoom-link">
+                        <img src="ubuntu-24.04_kde_default_terramex.png" alt="Ubuntu 24.04, KDE default theme, hidden menubar, running Terramex">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, KDE default theme, hidden menubar, running Terramex</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_dark_collapsed-menubar.png" class="zoom-link">
+                        <img src="ubuntu-24.04_dark_collapsed-menubar.png" alt="Ubuntu 24.04, custom theme, dark mode, collapsed menu bar">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, dark mode, collapsed menu bar</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_dark_collapsed-menubar_arkanoid.png" class="zoom-link">
+                        <img src="ubuntu-24.04_dark_collapsed-menubar_arkanoid.png" alt="Ubuntu 24.04, custom theme, dark mode, collapsed menu bar, running Arkanoid">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, dark mode, collapsed menu bar, running Arkanoid</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="ubuntu-24.04_light_embedded-menubar_microdrive.png" class="zoom-link">
+                        <img src="ubuntu-24.04_light_embedded-menubar_microdrive.png" alt="Ubuntu 24.04, custom theme, light mode, embedded menu bar, Microdrive">
+                    </a>
+                    <figcaption class="caption">Ubuntu 24.04, custom theme, light mode, embedded menu bar, Microdrive</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="win11_default_shock-megademo.png" class="zoom-link">
+                        <img src="win11_default_shock-megademo.png" alt="Windows 11, default theme, running Shock Megademo">
+                    </a>
+                    <figcaption class="caption">Windows 11, default theme, running Shock Megademo</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="win11_default_floating-bus.png" class="zoom-link">
+                        <img src="win11_default_floating-bus.png" alt="Windows 11, default theme, running floating bus tests">
+                    </a>
+                    <figcaption class="caption">Windows 11, default theme, running floating bus tests</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="win10_default_basic.png" class="zoom-link">
+                        <img src="win10_default_basic.png" alt="Windows 10, default theme, BASIC">
+                    </a>
+                    <figcaption class="caption">Windows 10, default theme, BASIC</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="winxp_default_timing-test.png" class="zoom-link">
+                        <img src="winxp_default_timing-test.png" alt="Windows XP, default theme, running the ZX Spectrum 48K Timing Tests">
+                    </a>
+                    <figcaption class="caption">Windows XP, default theme, running the ZX Spectrum 48K Timing Tests</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="winxp_default_fpga.png" class="zoom-link">
+                        <img src="winxp_default_fpga.png" alt="Windows XP, default theme, running the FPGA test">
+                    </a>
+                    <figcaption class="caption">Windows XP, default theme, running the FPGA test</figcaption>
+                </figure>
+
+                <figure class="shot">
+                    <a href="winxp_default_dark-mode.png" class="zoom-link">
+                        <img src="winxp_default_dark-mode.png" alt="Windows XP, default theme, dark-mode">
+                    </a>
+                    <figcaption class="caption">Windows XP, default theme, dark-mode</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section id="system-requirements" aria-labelledby="system-requirements-title">
+            <div class="section-title" id="system-requirements-title"><a href="#" class="back">System requirements</a></div>
+            <p>
+            The cross-platform <b>JAR</b> distribution requires <b>Java 8 or newer</b> to be installed on your system,
+            and it should work on any operating system supporting the required Java version.
+            This includes <b>Windows, from Windows XP up to Windows 11</b>, as well as <b>Linux distributions like Ubuntu 24.04 and Ubuntu 26.04</b>.
+            </p>
+            <p>
+            Running the emulator:
+            <div class="code-like">java -jar emulator.jar</div>
+            </p>
+        </section>
+
+        <section id="download" aria-labelledby="download-title">
+            <div class="section-title" id="download-title"><a href="#" class="back">Download</a></div>
+            <p>No packages are currently available.</p>
+            <div class="warning-box">
+                <!-- <span class="warning-icon">⚠️</span> -->
+                <span class="warning-text">
+                Depending on how you operate it, this emulator, just like a real ZX Spectrum machine,
+                can generate flashing images. Please <strong>DO NOT USE</strong> this software if you have any kind of sensitivity to flashing images.
+                </span>
+            </div>
+        </section>
+
+        <!--
+        <section id="contact" aria-labelledby="contact-title">
+            <div class="section-title" id="contact-title">Contact</div>
+            <div class="contact">
+                <div class="mono">contact@localhost.localdomain</div>
+            </div>
+        </section>
+        -->
+
+        <section id="license" aria-labelledby="license-title">
+            <div class="section-title" id="license-title"><a href="#" class="back">License</a></div>
+            <div class="license">
+                <p>
+                This software is licensed under the terms of the MIT License.
+                <br>
+                Read more about the MIT License at <a href="https://choosealicense.com/licenses/mit">https://choosealicense.com/licenses/mit</a>.
+                </p>
+                <p>
+                Additionally, this software includes the <b>FlatLaf</b> look and feel package, which is licensed under the terms of the Apache License, version 2.0.
+                Read more about the Apache License, version 2.0 at <a href="https://choosealicense.com/licenses/apache-2.0">https://choosealicense.com/licenses/apache-2.0</a>.
+                Read more about the FlatLaf package at <a href="https://www.formdev.com/flatlaf">https://www.formdev.com/flatlaf</a>.
+                </p>
+                <p>
+                <b>NOTICE for the firmware images distributed with this software</b>:
+                Amstrad have kindly given their permission for the redistribution of their copyrighted material but retain that copyright.
+                </p>
+            </div>
+        </section>
+
+        <footer>
+            <div>© <strong>Emulator</strong> - Handcrafted ZX Spectrum emulator</div>
+        </footer>
+    </main>
+</div>
+
+<dialog id="popup" closedby="any" onclick="this.close()">
+    <img id="popup-image" src="" alt="Full size">
+</dialog>
+
+<script>
+    document.querySelectorAll('.zoom-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('popup-image').src = link.href;
+            document.getElementById('popup').showModal();
+        });
+    });
+</script>
+<script src="menu.js"></script>
+</body>
+</html>
