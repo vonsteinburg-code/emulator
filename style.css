@@ -184,10 +184,18 @@ p {
     border: 1px solid var(--accent-blue);
 }
 
+.button:hover {
+    background: color-mix(in srgb, var(--accent-blue) 85%, black);
+}
+
 .button.ghost {
     background: transparent;
     color: var(--muted);
     border: 1px solid rgba(0,0,0,0.20);
+}
+
+.button.ghost:hover {
+    background: rgba(0,0,0,0.05);
 }
 
 section {
