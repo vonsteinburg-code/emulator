@@ -88,6 +88,10 @@ header {
     content: url("close.svg");
 }
 
+.menu-image:hover {
+    filter: brightness(0.0);
+}
+
 /* properties of the actual div containing the popup menu content */
 #menu-content {
     display: none;
